@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joyeux Anniversaire ❤️</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP pour les animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <!-- Swiper JS pour la galerie -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            /* Le fond principal devient neutre, chaque page gère maintenant son propre background */
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Animation de fond étoilé */
+        .starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .page {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 0.6s ease-in;
+            /* S'assurer que tous les backgrounds remplissent bien l'écran */
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+        }
+
+        .page.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Page 1 - Surprise */
+        .page1 {
+            background-image:
+                linear-gradient(135deg, rgba(255, 154, 158, 0.7) 0%, rgba(250, 208, 196, 0.7) 100%),
+                url('images/6.jpeg');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            /* L'animation de dégradé est désactivée pour laisser l'image bien visible */
+            /* animation: gradientShift 8s ease-in-out infinite; */
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            }
+            50% {
+                background: linear-gradient(225deg, #ff6b9d 0%, #ffa8a8 100%);
+            }
+            100% {
+                background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            }
+        }
+
+        .page1::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255, 200, 200, 0.1) 0%, transparent 50%);
+            animation: backgroundFloat 6s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes backgroundFloat {
+            0% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(30px, -30px);
+            }
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
+        .surprise-text {
+            font-size: 1.4rem;
+            color: white;
+            font-weight: 500;
+            text-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+            opacity: 0;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 85%;
+            line-height: 2;
+            padding: 2rem;
+            letter-spacing: 0.5px;
+        }
+
+        .surprise-text b {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: underline;
+            text-decoration-color: rgba(255, 255, 255, 0.6);
+            text-underline-offset: 5px;
+            text-decoration-thickness: 2px;
+        }
+
+        .surprise-text br + br::before {
+            content: '';
+            display: block;
+            height: 0.5rem;
+        }
+
+        /* Page 2 - Joyeux Anniversaire */
+        .page2 {
+            background-image:
+                linear-gradient(135deg, rgba(240, 147, 251, 0.7) 0%, rgba(245, 87, 108, 0.7) 100%),
+                url('images/7.webp');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .birthday-text {
+            font-size: 3.5rem;
+            color: white;
+            font-weight: bold;
+            text-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 90%;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+            line-height: 1.3;
+        }
+
+        .birthday-message {
+            font-size: 1.2rem;
+            color: white;
+            margin-top: 1.5rem;
+            max-width: 85%;
+            line-height: 2.2;
+            opacity: 0;
+            text-align: center;
+            padding: 1.5rem;
+            letter-spacing: 0.3px;
+            font-weight: 400;
+        }
+
+        /* Ballons */
+        .balloon {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: float-up 4s ease-in forwards;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(20px);
+                opacity: 0;
+            }
+        }
+
+        /* Cœurs flottants */
+        .floating-heart {
+            position: absolute;
+            font-size: 2rem;
+            animation: float-hearts 6s ease-in forwards;
+            pointer-events: none;
+        }
+
+        @keyframes float-hearts {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* Page 3 - Galerie */
+        .page3 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Background flou dynamique */
+        .page3::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: var(--bg-image);
+            background-size: cover;
+            background-position: center center;
+            filter: blur(40px);
+            opacity: 0.6;
+            z-index: 0;
+            transition: background-image 0.8s ease-in-out;
+        }
+
+        .gallery-container {
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .swiper {
+            width: 100%;
+            height: 400px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+        }
+
+        .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            animation: zoomIn 0.6s ease-out;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(1.1);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .gallery-message {
+            color: white;
+            font-size: 1.2rem;
+            margin-top: 2rem;
+            text-align: center;
+            font-style: italic;
+            opacity: 0;
+        }
+
+        /* Page 4 - Lettre */
+        .page4 {
+            background-image:
+                linear-gradient(135deg, rgba(250, 112, 154, 0.7) 0%, rgba(254, 225, 64, 0.7) 100%),
+                url('images/8.jpg');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .letter {
+            background: white;
+            padding: 2rem 2.5rem;
+            border-radius: 15px;
+            max-width: 550px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+            transform-origin: top;
+            transform: rotateX(90deg);
+            /* Laisse de l'espace avec les boutons de navigation en bas */
+            margin-bottom: 5rem;
+        }
+
+        .letter.opened {
+            animation: openLetter 0.8s ease-out forwards;
+        }
+
+        @keyframes openLetter {
+            0% {
+                transform: rotateX(90deg);
+                opacity: 0;
+            }
+            100% {
+                transform: rotateX(0);
+                opacity: 1;
+            }
+        }
+
+        .letter-content {
+            font-size: 0.9rem;
+            color: #333;
+            line-height: 1.8;
+            text-align: center;
+            letter-spacing: 0.3px;
+        }
+
+        .letter-content p {
+            margin: 0.8rem 0;
+            padding: 0 0.5rem;
+            font-weight: 400;
+        }
+
+        .letter-content p:first-child {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+
+        .letter-content p:nth-child(2) {
+            font-size: 0.95rem;
+            color: #444;
+            line-height: 1.9;
+            padding: 0.3rem 0;
+        }
+
+        .letter-signature {
+            font-size: 2.5rem;
+            margin-top: 1.5rem;
+            animation: heartBeat 1.2s ease-in-out infinite;
+            margin-bottom: 0.5rem;
+            font-weight: 300;
+        }
+
+        /* Particules flottantes page 1 */
+        .romantic-particle {
+            position: absolute;
+            pointer-events: none;
+            font-size: 1.5rem;
+            opacity: 0.6;
+            animation: float-romantic 8s ease-in-out infinite;
+            z-index: 1;
+            filter: drop-shadow(0 0 10px rgba(255, 150, 150, 0.5));
+        }
+
+        @keyframes float-romantic {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateY(-100px) translateX(50px) rotate(180deg) scale(1.1);
+                opacity: 0.9;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-200px) translateX(100px) rotate(360deg) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            animation: sparkle-flash 2s ease-in-out infinite;
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes sparkle-flash {
+            0%, 100% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes heartBeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            14% {
+                transform: scale(1.3);
+            }
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            position: fixed;
+            bottom: 2rem;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            z-index: 10;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            background: white;
+            color: #f5576c;
+            font-size: 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .page-indicator {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            z-index: 10;
+        }
+
+        /* ========== RESPONSIVE DESIGN ========== */
+        
+        /* Tablettes et petits écrans */
+        @media (max-width: 1024px) {
+            .surprise-text {
+                font-size: 1.2rem;
+                padding: 1.5rem;
+            }
+
+            .surprise-text b {
+                font-size: 1.5rem;
+            }
+
+            .birthday-text {
+                font-size: 2.8rem;
+            }
+
+            .birthday-message {
+                font-size: 1rem;
+                line-height: 1.8;
+            }
+
+            .swiper {
+                height: 350px;
+            }
+
+            .gallery-message {
+                font-size: 1rem;
+            }
+
+            .letter {
+                max-width: 90%;
+                padding: 1.8rem 2rem;
+            }
+
+            .letter-content p:first-child {
+                font-size: 1.3rem;
+            }
+
+            .letter-content p:nth-child(2) {
+                font-size: 0.85rem;
+            }
+
+            .btn {
+                padding: 10px 25px;
+                font-size: 0.95rem;
+            }
+
+            .page-indicator {
+                font-size: 1rem;
+                top: 1.5rem;
+                right: 1.5rem;
+            }
+        }
+
+        /* Smartphones portrait (600px et moins) */
+        @media (max-width: 600px) {
+            body {
+                overflow-y: auto;
+            }
+
+            .page {
+                min-height: 100vh;
+                justify-content: flex-start;
+                padding-top: 2rem;
+                padding-bottom: 6rem;
+            }
+
+            .page1 {
+                /* Garde l'image bien centrée même sur petit écran */
+                background-size: cover;
+                background-position: center top;
+                padding-top: 1rem;
+            }
+
+            .surprise-text {
+                font-size: 1rem;
+                line-height: 1.6;
+                padding: 1rem;
+                max-width: 95%;
+                margin: 0 auto;
+            }
+
+            .surprise-text b {
+                font-size: 1.3rem;
+            }
+
+            .page2 {
+                /* Garde l'image bien centrée même sur petit écran */
+                background-size: cover;
+                background-position: center top;
+                padding-top: 1rem;
+            }
+
+            .birthday-text {
+                font-size: 1.8rem;
+                margin-bottom: 0.8rem;
+                letter-spacing: 0.5px;
+            }
+
+            .birthday-message {
+                font-size: 0.9rem;
+                line-height: 1.6;
+                max-width: 95%;
+                margin: 0 auto;
+                padding: 1rem;
+                margin-top: 1rem;
+            }
+
+            .gallery-container {
+                width: 95%;
+                max-width: 100%;
+            }
+
+            .swiper {
+                height: 300px;
+                border-radius: 15px;
+            }
+
+            .gallery-message {
+                font-size: 0.9rem;
+                margin-top: 1.5rem;
+            }
+
+            .page4 {
+                padding-top: 1rem;
+            }
+
+            .letter {
+                max-width: 95%;
+                margin: 0 auto;
+                padding: 1.5rem;
+                border-radius: 12px;
+            }
+
+            .letter-content {
+                font-size: 0.85rem;
+                line-height: 1.6;
+            }
+
+            .letter-content p {
+                margin: 0.6rem 0;
+                padding: 0 0.3rem;
+            }
+
+            .letter-content p:first-child {
+                font-size: 1.2rem;
+                margin-bottom: 0.8rem;
+            }
+
+            .letter-content p:nth-child(2) {
+                font-size: 0.8rem;
+                line-height: 1.7;
+            }
+
+            .letter-signature {
+                font-size: 2rem;
+                margin-top: 1rem;
+                margin-bottom: 0.3rem;
+            }
+
+            /* Navigation mobile */
+            .nav-buttons {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                gap: 0.5rem;
+                padding: 1rem;
+                /* Fond semi-transparent qui s'adapte à toutes les pages */
+                background: rgba(0, 0, 0, 0.35);
+                backdrop-filter: blur(10px);
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+                bottom: env(safe-area-inset-bottom);
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+                flex: 1;
+                box-shadow: 0 3px 15px rgba(0,0,0,0.15);
+            }
+
+            .btn:hover {
+                transform: translateY(-2px);
+            }
+
+            .page-indicator {
+                top: 1rem;
+                right: 1rem;
+                font-size: 0.9rem;
+                background: rgba(0, 0, 0, 0.3);
+                padding: 0.5rem 1rem;
+                border-radius: 20px;
+            }
+
+            /* Animations mobile optimisées */
+            .romantic-particle {
+                font-size: 1.2rem;
+            }
+
+            .floating-heart {
+                font-size: 1.5rem;
+            }
+
+            .balloon {
+                animation: float-up 3s ease-in forwards;
+            }
+
+            .floating-heart {
+                animation: float-hearts 4s ease-in forwards;
+            }
+        }
+
+        /* Très petits écrans (moins de 480px) */
+        @media (max-width: 480px) {
+            .page {
+                padding-top: 1.5rem;
+                padding-bottom: 5.5rem;
+            }
+
+            .surprise-text {
+                font-size: 0.95rem;
+            }
+
+            .surprise-text b {
+                font-size: 1.1rem;
+            }
+
+            .birthday-text {
+                font-size: 1.5rem;
+            }
+
+            .birthday-message {
+                font-size: 0.85rem;
+            }
+
+            .swiper {
+                height: 280px;
+            }
+
+            .gallery-message {
+                font-size: 0.85rem;
+            }
+
+            .letter {
+                padding: 1.2rem 1rem;
+            }
+
+            .letter-content {
+                font-size: 0.8rem;
+            }
+
+            .letter-signature {
+                font-size: 1.8rem;
+            }
+
+            .nav-buttons {
+                padding: 0.8rem;
+            }
+
+            .btn {
+                padding: 8px 15px;
+                font-size: 0.85rem;
+            }
+
+            .page-indicator {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+        }
+
+        /* Paysage (landscape) */
+        @media (max-height: 600px) {
+            .page {
+                min-height: 100vh;
+            }
+
+            .surprise-text {
+                padding: 1rem;
+                font-size: 1rem;
+            }
+
+            .birthday-text {
+                font-size: 2rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .birthday-message {
+                font-size: 0.9rem;
+                padding: 0.8rem;
+                margin-top: 0.5rem;
+            }
+
+            .swiper {
+                height: 250px;
+            }
+
+            .letter {
+                max-height: 90vh;
+                overflow-y: auto;
+                padding: 1.2rem;
+            }
+
+            .nav-buttons {
+                bottom: env(safe-area-inset-bottom);
+                padding: 0.8rem 0.5rem;
+            }
+
+            .btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fond étoilé -->
+    <div class="starfield" id="starfield"></div>
+
+    <!-- Page 1: Surprise -->
+    <div class="page page1 active" id="page1">
+        <div id="page1-particles"></div>
+        <p class="surprise-text">Bienvenue Loreina a... ❤️<br>
+            Si tu vois cette page, c’est que tu viens de découvrir une petite surprise que j’ai préparée spécialement pour toi.<br>
+            Aujourd’hui est un jour très particulier… <br>
+            Parce qu’aujourd’hui, on célèbre la naissance d’une personne extraordinaire : <b>Loreina</b>. <br>
+            Ton sourire illumine mes journées, ta présence rend ma vie plus belle, et chaque moment passé avec toi est un cadeau précieux. <br>
+            Alors prends quelques instants, explore cette petite surprise, et laisse-moi te rappeler à quel point tu es importante pour moi. <br>
+
+            Avec tout mon cœur. ❤️
+</p>
+    </div>
+
+    <!-- Page 2: Joyeux Anniversaire -->
+    <div class="page page2" id="page2">
+        <div>
+            <h1 class="birthday-text">🎉 Joyeux Anniversaire Loreina ❤️</h1>
+            <p class="birthday-message">
+                Lora a... ❤️ <br>
+                Aujourd’hui est un jour très spécial, parce qu’il célèbre la naissance de la personne qui rend ma vie plus belle chaque jour. <br>
+                Depuis que tu es entrée dans ma vie, tout a changé. Ton sourire illumine mes journées, ta voix apaise mon cœur, et ta présence est le plus beau cadeau que la vie m’ait offert. <br>
+                En ce jour merveilleux, je veux simplement te dire merci… <br>
+                Merci pour ton amour, ta tendresse, ta patience et tous les moments précieux que nous partageons ensemble. <br>
+                Je te souhaite un anniversaire rempli de bonheur, de rires et de rêves qui deviennent réalité. Et je promets d’être toujours là pour t’aimer, te soutenir et marcher à tes côtés dans chaque étape de la vie. <br>
+                Joyeux anniversaire à la femme la plus merveilleuse à mes yeux. <br>
+                Je t’aime aujourd’hui, demain et pour toujours. ❤️ <br>
+
+            </p>
+        </div>
+    </div>
+
+    <!-- Page 3: Galerie Photo -->
+    <div class="page page3" id="page3">
+        <div class="gallery-container">
+            <div class="swiper">
+                <div class="swiper-wrapper">
+                    <!-- Les photos seront ajoutées dynamiquement -->
+                </div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+            <p class="gallery-message">
+                Chaque photo me rappelle à quel point<br>
+                je suis chanceux de t'avoir. 📸
+            </p>
+        </div>
+    </div>
+
+    <!-- Page 4: Lettre Personnelle -->
+    <div class="page page4" id="page4">
+        <div class="letter" id="letter">
+            <div class="letter-content">
+                <p>💌</p>
+                <p>Merci petite princesse ❤️
+                    Merci d’avoir pris le temps de découvrir cette petite surprise que j’ai préparée pour toi. <br>
+                    Si j’ai créé tout cela, c’est simplement parce que tu es une personne incroyablement spéciale pour moi. <br>
+                    Merci pour ton amour, pour ton sourire qui illumine mes journées, et pour tous les moments merveilleux que nous partageons ensemble. <br>
+                    Ta présence dans ma vie est l’un des plus beaux cadeaux que j’ai reçus, et je suis vraiment reconnaissant de t’avoir à mes côtés. <br>
+                    Encore une fois, joyeux anniversaire chérie be ako. <br>
+                    Et surtout… merci d’être toi. ❤️</p>
+
+                <p style="margin-top: 2rem; font-size: 1.3rem; font-weight: 600;">
+                    Je te souhaite le plus beau des anniversaires.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-buttons">
+        <button class="btn" id="prevBtn" onclick="prevPage()">← Précédent</button>
+        <button class="btn" id="nextBtn" onclick="nextPage()">Suivant →</button>
+    </div>
+
+    <!-- Page Indicator -->
+    <div class="page-indicator">
+        <span id="pageNumber">1</span> / 4
+    </div>
+
+    <!-- Audio pour la musique -->
+    <audio id="music" autoplay loop volume="1">
+        <source src="images/music/romantic.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // ==================== VARIABLES GLOBALES ====================
+        let currentPage = 1;
+        const totalPages = 4;
+        let swiper = null;
+
+        // ==================== INITIALISATION ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeStarfield();
+            initializePage1();
+            initializeSwiper();
+            
+            // Configurer la musique
+            const music = document.getElementById('music');
+            music.volume = 1; // Volume max
+            music.play().catch(err => {
+                console.log('Autoplay bloqué. La musique se lancera au premier clic.');
+            });
+        });
+
+        // Lancer la musique au premier clic/interaction
+        document.addEventListener('click', function playMusicOnce() {
+            const music = document.getElementById('music');
+            if (music.paused) {
+                music.play().catch(err => {
+                    console.log('Erreur lors du lancement de la musique:', err);
+                });
+            }
+            // Enlever le listener après le premier clic
+            document.removeEventListener('click', playMusicOnce);
+        }, { once: true });
+        // ==================== STARFIELD ====================
+        function initializeStarfield() {
+            const starfield = document.getElementById('starfield');
+            const starCount = 50;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const size = Math.random() * 2 + 1;
+                const duration = Math.random() * 3 + 2;
+                
+                star.style.left = x + '%';
+                star.style.top = y + '%';
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.animationDuration = duration + 's';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                
+                starfield.appendChild(star);
+            }
+        }
+
+        // ==================== PAGE 1 - SURPRISE ====================
+        function initializePage1() {
+            const surpriseText = document.querySelector('.surprise-text');
+            
+            // Créer les particules romantiques
+            createRomanticParticles();
+            
+            // Animer le texte d'apparition
+            gsap.to(surpriseText, {
+                opacity: 1,
+                duration: 2,
+                delay: 0.5,
+                ease: 'power2.out'
+            });
+        }
+
+        // ==================== PARTICULES ROMANTIQUES PAGE 1 ====================
+        function createRomanticParticles() {
+            const container = document.getElementById('page1-particles');
+            const particles = ['❤️', '✨', '💕', '🌹', '💖'];
+            const particleCount = 20;
+            
+            // Créer les particules flottantes
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'romantic-particle';
+                particle.textContent = particles[Math.floor(Math.random() * particles.length)];
+                
+                const randomLeft = Math.random() * 100;
+                const randomDelay = Math.random() * 4;
+                const randomDuration = 8 + Math.random() * 4;
+                
+                particle.style.left = randomLeft + '%';
+                particle.style.bottom = '-50px';
+                particle.style.animationDelay = randomDelay + 's';
+                particle.style.animationDuration = randomDuration + 's';
+                
+                container.appendChild(particle);
+            }
+            
+            // Créer les étincelles scintillantes
+            const sparkleCount = 15;
+            for (let i = 0; i < sparkleCount; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                
+                const randomX = Math.random() * 100;
+                const randomY = Math.random() * 100;
+                const randomDelay = Math.random() * 3;
+                const randomDuration = 2 + Math.random() * 2;
+                
+                sparkle.style.left = randomX + '%';
+                sparkle.style.top = randomY + '%';
+                sparkle.style.animationDelay = randomDelay + 's';
+                sparkle.style.animationDuration = randomDuration + 's';
+                
+                container.appendChild(sparkle);
+            }
+        }
+
+        // ==================== PAGE 2 - JOYEUX ANNIVERSAIRE ====================
+        function animatePage2() {
+            const page2 = document.getElementById('page2');
+            const birthdayText = document.querySelector('.birthday-text');
+            const birthdayMessage = document.querySelector('.birthday-message');
+            
+            // Animer le texte principal
+            gsap.fromTo(birthdayText, 
+                { opacity: 0, scale: 0.8 },
+                { opacity: 1, scale: 1, duration: 1, ease: 'back.out' }
+            );
+            
+            // Animer le message
+            setTimeout(() => {
+                gsap.to(birthdayMessage, {
+                    opacity: 1,
+                    duration: 1.5,
+                    ease: 'power2.out'
+                });
+            }, 500);
+            
+            // Créer des confettis
+            setTimeout(() => {
+                createConfetti();
+            }, 800);
+            
+            // Créer des ballons
+            createBalloons(page2);
+            
+            // Créer des cœurs flottants
+            createFloatingHearts(page2);
+        }
+
+        // ==================== CONFETTIS ====================
+        function createConfetti() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+            
+            // Deuxième explosion
+            setTimeout(() => {
+                confetti({
+                    particleCount: 50,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0, y: 0.5 }
+                });
+            }, 200);
+            
+            // Troisième explosion
+            setTimeout(() => {
+                confetti({
+                    particleCount: 50,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1, y: 0.5 }
+                });
+            }, 400);
+        }
+
+        // ==================== BALLONS ====================
+        function createBalloons(container) {
+            const colors = ['#FF69B4', '#FFD700', '#87CEEB', '#98FF98', '#FF6347', '#DDA0DD'];
+            
+            for (let i = 0; i < 8; i++) {
+                const balloon = document.createElement('div');
+                balloon.className = 'balloon';
+                
+                const size = Math.random() * 40 + 30;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const delay = i * 0.3;
+                const leftPosition = Math.random() * 100;
+                
+                balloon.style.width = size + 'px';
+                balloon.style.height = size + 'px';
+                balloon.style.background = color;
+                balloon.style.left = leftPosition + '%';
+                balloon.style.bottom = '-100px';
+                balloon.style.animationDelay = delay + 's';
+                
+                container.appendChild(balloon);
+                
+                // Supprimer après l'animation
+                setTimeout(() => {
+                    if (balloon.parentNode) balloon.remove();
+                }, 5000 + delay * 1000);
+            }
+        }
+
+        // ==================== CŒURS FLOTTANTS ====================
+        function createFloatingHearts(container) {
+            const heartCount = 15;
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.textContent = '❤️';
+                
+                const delay = Math.random() * 2;
+                const leftPosition = Math.random() * 100;
+                
+                heart.style.left = leftPosition + '%';
+                heart.style.bottom = '-30px';
+                heart.style.animationDelay = delay + 's';
+                
+                container.appendChild(heart);
+                
+                // Supprimer après l'animation
+                setTimeout(() => {
+                    if (heart.parentNode) heart.remove();
+                }, 7000 + delay * 1000);
+            }
+        }
+
+        // ==================== PAGE 3 - GALERIE ====================
+        function initializeSwiper() {
+            const swiperWrapper = document.querySelector('.swiper-wrapper');
+            
+            // ✨ AJOUTE TES PHOTOS ICI ✨
+            // Remplace les URLs par le chemin de tes photos
+            // Exemple: 'images/photo1.jpg', 'images/photo2.jpg', etc.
+            const photos = [
+                'images/2.jpeg',
+                'images/3.jpeg',
+                'images/4.jpeg',
+                'images/5.jpeg',
+                'images/0.jpeg'
+            ];
+            
+            // Alternative: utilise des URLs externes
+            // const photos = [
+            //     'https://via.placeholder.com/600x400/ff9a9e/ffffff?text=Photo+1',
+            //     'https://via.placeholder.com/600x400/fad0c4/ffffff?text=Photo+2',
+            // ];
+            
+            photos.forEach((photo, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'swiper-slide';
+                slide.innerHTML = `<img src="${photo}" alt="Photo ${index + 1}">`;
+                swiperWrapper.appendChild(slide);
+            });
+
+            // Définir immédiatement le background flou avec la première image
+            if (photos.length > 0) {
+                const page3 = document.getElementById('page3');
+                page3.style.setProperty('--bg-image', `url('${photos[0]}')`);
+            }
+            
+            // Initialiser Swiper
+            swiper = new Swiper('.swiper', {
+                effect: 'coverflow',
+                grabCursor: true,
+                centeredSlides: true,
+                slidesPerView: 'auto',
+                coverflowEffect: {
+                    rotate: 50,
+                    stretch: 0,
+                    depth: 100,
+                    modifier: 1,
+                    slideShadows: true,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                on: {
+                    slideChange: function() {
+                        // Récupérer l'image active
+                        const activeSlide = this.slides[this.activeIndex];
+                        const imgElement = activeSlide.querySelector('img');
+                        
+                        if (imgElement && imgElement.src) {
+                            // Changer le background flou de la page3
+                            const page3 = document.getElementById('page3');
+                            page3.style.setProperty('--bg-image', `url('${imgElement.src}')`);
+                        }
+                    },
+                    init: function() {
+                        // Initialiser avec la première image
+                        const firstImg = this.slides[0].querySelector('img');
+                        if (firstImg && firstImg.src) {
+                            const page3 = document.getElementById('page3');
+                            page3.style.setProperty('--bg-image', `url('${firstImg.src}')`);
+                        }
+                    }
+                }
+            });
+        }
+
+        function animatePage3() {
+            const galleryMessage = document.querySelector('.gallery-message');
+            const page3 = document.getElementById('page3');
+            
+            // Mettre le background avec la première image dès l'arrivée sur la page
+            if (swiper && swiper.slides && swiper.slides.length > 0) {
+                const firstImg = swiper.slides[0].querySelector('img');
+                if (firstImg && firstImg.src) {
+                    page3.style.setProperty('--bg-image', `url('${firstImg.src}')`);
+                }
+            }
+            
+            gsap.to(galleryMessage, {
+                opacity: 1,
+                duration: 1.5,
+                delay: 0.5,
+                ease: 'power2.out'
+            });
+        }
+
+        // ==================== PAGE 4 - LETTRE ====================
+        function animatePage4() {
+            const letter = document.getElementById('letter');
+            letter.classList.add('opened');
+        }
+
+        // ==================== NAVIGATION ====================
+        function nextPage() {
+            if (currentPage < totalPages) {
+                document.getElementById(`page${currentPage}`).classList.remove('active');
+                currentPage++;
+                document.getElementById(`page${currentPage}`).classList.add('active');
+                document.getElementById('pageNumber').textContent = currentPage;
+                animateCurrentPage();
+                updateButtons();
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                document.getElementById(`page${currentPage}`).classList.remove('active');
+                currentPage--;
+                document.getElementById(`page${currentPage}`).classList.add('active');
+                document.getElementById('pageNumber').textContent = currentPage;
+                animateCurrentPage();
+                updateButtons();
+            }
+        }
+
+        function updateButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            if (currentPage === 1) {
+                prevBtn.classList.add('btn-hidden');
+            } else {
+                prevBtn.classList.remove('btn-hidden');
+            }
+            
+            if (currentPage === totalPages) {
+                nextBtn.classList.add('btn-hidden');
+            } else {
+                nextBtn.classList.remove('btn-hidden');
+            }
+        }
+
+        function animateCurrentPage() {
+            switch(currentPage) {
+                case 2:
+                    animatePage2();
+                    break;
+                case 3:
+                    animatePage3();
+                    break;
+                case 4:
+                    animatePage4();
+                    break;
+            }
+        }
+
+        // Initialiser les boutons
+        updateButtons();
+    </script>
+</body>
+</html>
