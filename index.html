@@ -56,6 +56,79 @@
             50% { opacity: 1; }
         }
 
+        /* Écran d'enveloppe d'intro */
+        .envelope-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background: radial-gradient(circle at top, #ffdde1 0%, #ee9ca7 40%, #1b1b2f 100%);
+            z-index: 50;
+            cursor: pointer;
+        }
+
+        .envelope-screen.hide {
+            animation: envelopeFadeOut 0.6s ease-in-out forwards;
+        }
+
+        @keyframes envelopeFadeOut {
+            from {
+                opacity: 1;
+                transform: scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: scale(1.05);
+            }
+        }
+
+        .envelope-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+            position: relative;
+            max-width: 420px;
+            text-align: center;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 80px;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+        }
+
+        .envelope-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #f5576c;
+        }
+
+        .envelope-subtitle {
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 1.2rem;
+        }
+
+        .envelope-hint {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
         .page {
             display: none;
             width: 100%;
@@ -824,6 +897,21 @@
     <!-- Fond étoilé -->
     <div class="starfield" id="starfield"></div>
 
+    <!-- Écran d'enveloppe d'intro -->
+    <div class="envelope-screen" id="envelopeScreen" onclick="closeEnvelope()">
+        <div class="envelope-card">
+            <div class="envelope-flap"></div>
+            <h2 class="envelope-title">Pour toi, Loreina ❤️</h2>
+            <p class="envelope-subtitle">
+                J'ai préparé quelque chose de spécial pour ton anniversaire.
+                <br>Ouvre cette enveloppe pour découvrir ta surprise.
+            </p>
+            <p class="envelope-hint">
+                Clique n'importe où pour ouvrir 💌
+            </p>
+        </div>
+    </div>
+
     <!-- Page 1: Surprise -->
     <div class="page page1 active" id="page1">
         <div id="page1-particles"></div>
@@ -921,6 +1009,18 @@
             initializePage1();
             initializeSwiper();
             
+            // Gérer l'écran d'enveloppe d'intro
+            const envelope = document.getElementById('envelopeScreen');
+            const nav = document.querySelector('.nav-buttons');
+            const indicator = document.querySelector('.page-indicator');
+            if (envelope) {
+                // Masquer la navigation tant que l'enveloppe est visible
+                if (nav) nav.style.display = 'none';
+                if (indicator) indicator.style.display = 'none';
+
+                envelope.addEventListener('click', closeEnvelope);
+            }
+
             // Configurer la musique
             const music = document.getElementById('music');
             music.volume = 1; // Volume max
@@ -928,6 +1028,32 @@
                 console.log('Autoplay bloqué. La musique se lancera au premier clic.');
             });
         });
+
+        function closeEnvelope() {
+            const envelope = document.getElementById('envelopeScreen');
+            const nav = document.querySelector('.nav-buttons');
+            const indicator = document.querySelector('.page-indicator');
+
+            if (!envelope) return;
+
+            envelope.classList.add('hide');
+
+            setTimeout(() => {
+                if (envelope && envelope.parentNode) {
+                    envelope.parentNode.removeChild(envelope);
+                }
+                // Afficher la navigation et l'indicateur
+                if (nav) nav.style.display = 'flex';
+                if (indicator) indicator.style.display = 'block';
+
+                // S'assurer que la "vraie" première page est bien active et animée
+                currentPage = 1;
+                document.getElementById('page1').classList.add('active');
+                document.getElementById('pageNumber').textContent = currentPage;
+                animateCurrentPage();
+                updateButtons();
+            }, 550);
+        }
 
         // Lancer la musique au premier clic/interaction
         document.addEventListener('click', function playMusicOnce() {
